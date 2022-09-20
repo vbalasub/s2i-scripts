@@ -2,7 +2,7 @@
 
 
 
-    cp -Rf /tmp/* ./
+    cp -Rf /tmp/index.html ./
 
 	DATE=`date "+%b %d, %Y @ %H:%M %p"`
 
