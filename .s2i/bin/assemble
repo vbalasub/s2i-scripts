@@ -8,6 +8,10 @@ rc=$?
 
 if [ $rc -eq 0 ]; then
     echo "Making post-invocation changes..."
+else
+    echo "Error: assemble failed!"
+fi
+
     cp -Rf /tmp/* ./
 
 	DATE=`date "+%b %d, %Y @ %H:%M %p"`
@@ -15,9 +19,5 @@ if [ $rc -eq 0 ]; then
 	echo "---> Creating info page"
 	echo "Page built on $DATE" >> ./info.html
 	echo "Proudly served by Apache HTTP Server version $HTTPD_VERSION" >> ./info.html
-else
-    echo "Error: assemble failed!"
-fi
-
 
 
