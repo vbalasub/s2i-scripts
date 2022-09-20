@@ -8,7 +8,7 @@ rc=$?
 
 if [ $rc -eq 0 ]; then
     echo "Making post-invocation changes..."
-    cp -Rf /tmp/*.html ./
+    cp -Rf /tmp/* ./
 
 	DATE=`date "+%b %d, %Y @ %H:%M %p"`
 
