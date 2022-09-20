@@ -1,41 +1,23 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
 
-source ${HTTPD_CONTAINER_SCRIPTS_PATH}/common.sh
+echo "Making pre-invocation changes..."
 
-echo "---> Enabling s2i support in httpd24 image"
+/usr/libexec/s2i/assemble
+rc=$?
 
-config_s2i
+if [ $rc -eq 0 ]; then
+    echo "Making post-invocation changes..."
+    cp -Rf /tmp/src/*.html ./
 
-######## CUSTOMIZATION STARTS HERE ############
+	DATE=`date "+%b %d, %Y @ %H:%M %p"`
 
-echo "---> Installing application source"
-cp -Rf /tmp/src/*.html ./
-
-DATE=`date "+%b %d, %Y @ %H:%M %p"`
-
-echo "---> Creating info page"
-echo "Page built on $DATE" >> ./info.html
-echo "Proudly served by Apache HTTP Server version $HTTPD_VERSION" >> ./info.html
-
-######## CUSTOMIZATION ENDS HERE ############
-
-if [ -d ./httpd-cfg ]; then
-  echo "---> Copying httpd configuration files..."
-  if [ "$(ls -A ./httpd-cfg/*.conf)" ]; then
-    cp -v ./httpd-cfg/*.conf "${HTTPD_CONFIGURATION_PATH}"
-    rm -rf ./httpd-cfg
-  fi
+	echo "---> Creating info page"
+	echo "Page built on $DATE" >> ./info.html
+	echo "Proudly served by Apache HTTP Server version $HTTPD_VERSION" >> ./info.html
 else
-  if [ -d ./cfg ]; then
-    echo "---> Copying httpd configuration files from deprecated './cfg' directory, use './httpd-cfg' instead..."
-    if [ "$(ls -A ./cfg/*.conf)" ]; then
-      cp -v ./cfg/*.conf "${HTTPD_CONFIGURATION_PATH}"
-      rm -rf ./cfg
-    fi
-  fi
+    echo "Error: assemble failed!"
 fi
 
-# Fix source directory permissions
-fix-permissions ./
+
+
