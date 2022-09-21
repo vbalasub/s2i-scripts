@@ -1,8 +1,15 @@
 #!/bin/bash -e
+/usr/libexec/s2i/assemble
+rc=$?
+if [ $rc -eq 0 ]; then
+echo "Making post-invocation changes..."
+else
+echo "Error: assemble failed!"
+fi
     cp -Rf /tmp/src/index.html ./
 	DATE=`date "+%b %d, %Y @ %H:%M %p"`
 	echo "---> Creating info page"
 	echo "Page built on $DATE" >> ./info.html
 	echo "Proudly served by Apache HTTP Server version $HTTPD_VERSION" >> ./info.html
-
+exit $rc
 
